@@ -49,7 +49,7 @@ These lines are commented out by default, so remove the leading '#' characters a
 * 27/09/2022 - No load control file from CMD  - FIXED, CLOSED 30/09/2022  
   When entering (only) the name of the control file from CMD, Morfeus does not load it.  
   RESOLUTION: The error was in checking the name under which Morfeus was run. This led to the program mistakenly thinking it was running over a link.  
-* 30/09/2022 - IconTheme no Load feanza.cfg  - FIXED
+* 30/09/2022 - IconTheme no Load feanza.cfg  - FIXED  
   RESOLUTIN: The icon manager will be overwritten
   
 ## 4. PROJECT STATE AND PLANS FOR THE FUTHURE

@@ -70,6 +70,6 @@ You should have received a copy of the GNU General Public License along with Mor
 
 ## 6. INTERNET
   * [Author's blog (CZ)](http://bfuplusplus.blogspot.cz/)
-  
+  * [Gorgona](https://github.com/PGSafarik/Gorgona)
 
 === END ===

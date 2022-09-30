@@ -39,7 +39,7 @@ void MW_CoverFrame::showImage( const FXString &name )
   FXString f     = FXString::null;
 
   #ifdef __DEBUG
-  cout << "[ DEBUG MW_CoverFrame ] Show image of name: " << name.text( ) << endl;
+  cout << "[DEBUG] Show image of name: " << name.text( ) << endl;
   #endif // __DEBUG
   if( m_xmlCoversMap ) {
 	XMLElement *e = m_xmlCoversMap->FirstChildElement( name.text( ) );

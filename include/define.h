@@ -8,7 +8,35 @@
 #include<tinyxml2.h>
 #include<Utils.h>
 
-#define __DEBUG
+//#define __DEBUG
+
+namespace Morfeus_Version {
+	
+	//Date Version Types
+	static const char DATE[] = "30";
+	static const char MONTH[] = "09";
+	static const char YEAR[] = "2022";
+	static const char UBUNTU_VERSION_STYLE[] =  "22.09";
+	
+	//Software Status
+	static const char STATUS[] =  "ALPHA";
+	static const char STATUS_SHORT[] =  "a";
+	
+	//Standard Version Type
+	static const long MAJOR  = 0;
+	static const long MINOR  = 3;
+	static const long BUILD  = 0;
+	static const long REVISION  = 1;
+	
+	//Miscellaneous Version Types
+	static const long BUILDS_COUNT  = 1;
+	#define RC_FILEVERSION 0,3,0,1
+	#define RC_FILEVERSION_STRING "0, 3, 0, 1\0"
+	static const char FULLVERSION_STRING [] = "0.3.0.1";
+	
+	//These values are to keep track of your versioning state, don't modify them.
+	static const long BUILD_HISTORY  = 0;
+}
 
 //#define DEFAULT_THEME_PATH  "/usr/share/games/morfeus/data/"
 #define DEFAULT_THEME_PATH "/home/gabriel/Projects/Fox/Morfeus/BETA_02.00/data/"
@@ -32,6 +60,8 @@
 #define MODE_SELECTOR FRAME_LINE | LAYOUT_SIDE_TOP | LAYOUT_FILL_X, SPACING_NONE
 #define MODE_ACTOR    FRAME_NONE | LAYOUT_SIDE_BOTTOM | LAYOUT_CENTER_X | LAYOUT_FILL_X, SPACING_NONE
 #define MODE_SERVICE  FRAME_NONE /*| PACK_UNIFORM_WIDTH | PACK_UNIFORM_HEIGHT*/
+
+
 
 using namespace tinyxml2;
 using namespace std;

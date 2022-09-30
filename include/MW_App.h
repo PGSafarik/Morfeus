@@ -28,6 +28,8 @@ public:
   const FXString ReadConfig( const FXString &key, const FXString &def = "" );
   void           WriteConfig( const FXString &key, const FXString &value );
 
+   void settings_load( );
+   void settings_save( );
   /*** Access methods ***/
   XMLError    getXMLstate( ) { return m_xmlstate; }
   XMLElement* getXMLRoot( )  { return m_xmlroot;  }

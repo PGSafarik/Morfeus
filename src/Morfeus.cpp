@@ -80,7 +80,7 @@ void MorfeusWindow::create( )
    else {
 	   FXString msg = "Nenalezen nebo chybny kontrolni XML soubor:\n";
      //msg += m_xmldoc->ErrorStr( );
-	   cerr << "Fatal error: Morfeus xml control file not found! Exiting...\n" << msg.text( ) << endl;
+	   cerr << "[FATAL RRROR] Morfeus xml control file not found! Exiting...\n" << msg.text( ) << endl;
 	   FXMessageBox::error( getApp( ), MBOX_OK, "Nelze pokracovat!", msg.text( ) );
 	   exit( 1 );
    }
@@ -115,7 +115,7 @@ FXbool MorfeusWindow::Initialize( )
     FXString h_size = xml_root->Attribute ( "height" );
     
     #ifdef __DEBUG
-    cout << "Set size: " << w_size.text( ) << " x " << h_size.text( ) << endl;
+    cout << "[DEBUG] Set size: " << w_size.text( ) << " x " << h_size.text( ) << endl;
     #endif // __DEBUG
 
     if( !w_size.empty( ) ) { this->setWidth( w_size.toInt( ) ); }
@@ -125,7 +125,7 @@ FXbool MorfeusWindow::Initialize( )
       FXIcon *icon = GetIcon( xml_root->Attribute( "icon" ) );
       if( icon ) { setIcon( icon ); }
     }
-    else { cerr << "Nenalezeny seznam ikon!" << endl; }
+    else { cerr << "[WARNING] Nenalezeny seznam ikon!" << endl; }
 
     // Pocatecni nastaveni pracovniho adresar Morfea
     FXString wp = xml_root->Attribute( "workdir" );
@@ -393,7 +393,7 @@ FXIcon* MorfeusWindow::GetIcon( const FXString &name, int size )
   if( !icon_path.empty( ) ) {
 	  icon = m_icons->insert( icon_path );
 	  #ifdef __DEBUG
-    if( !icon ) { cout << "[DEBUG]Icon " << name.text( ) << "NOT CREATED!" << endl; }
+    if( !icon ) { cout << "[DEBUG] Icon " << name.text( ) << "NOT CREATED!" << endl; }
     #endif // __DEBUG
 
 	  if( m_created ) { icon->create( ); }
@@ -426,7 +426,7 @@ FXIcon* MorfeusWindow::GetIconCopy( const FXString &name, int size )
 void MorfeusWindow::ShowMenuIcon( FXIcon *ic )
 {
    FXIcon *menu_ic = NULL;
-   if( !ic ) { cout << "Icon not set" << endl; }
+   if( !ic ) { cout << "[WARNING] Icon not set" << endl; }
    menu_ic = ( ic ? ic : this->getIcon( ) );													   // FXWindow::getIcon( )      -> Vrati ikonu ktera je aktualne oknu nastavena
    m_menu->setIcon( ( menu_ic ? menu_ic : getMenuIcon( ) ) );									   // FXGWindow::getMenuIcon( ) -> Vrati preddefinovanou ikonu urcenou pro hlavni menu
 }
@@ -450,7 +450,7 @@ XMLElement* MorfeusWindow::CheckContext( XMLElement *actionel )
     }
   }
   #ifdef __DEBUG
-  cout << "[ Debug ] Found context? " << ( contextel ? "Yes" : "No" ) << "\n";
+  cout << "[DEBUG] Found context? " << ( contextel ? "Yes" : "No" ) << "\n";
   #endif // __DEBUG
   
   return ( contextel ? contextel : actionel );

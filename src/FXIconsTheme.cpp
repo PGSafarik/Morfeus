@@ -104,9 +104,9 @@ FXString FXIconsTheme::at( XMLElement *thelem, const FXString &name, int size )
        if( i_pattern.empty( ) ) { i_pattern = thelem->Attribute( "pattern" ); }
        result = macro( i_pattern );
     }
-    else { std::cerr << "[ ICON THEME - XML]: Nenalezena icona jmenem: \'" << name.text( ) << "\'" << endl; }
+    else { std::cerr << "[WARNING] FXIconsTheme::at: Nenalezena icona jmenem: \'" << name.text( ) << "\'" << endl; }
   }
-  else { std::cerr << "[ICON THEME] XML: Nepredan element seznamu \'<Theme:Icon>\'!" << std::endl;	}
+  else { std::cerr << "[WARRNING] FXIconsTheme::at: Nepredan element seznamu \'<Theme:Icon>\'!" << std::endl;	}
 
   return result;
 }
@@ -120,7 +120,7 @@ void FXIconsTheme::load( const FXString &themefile )
 
   if( FXStat::exists( themefile ) && data.parseFile( themefile ) ) {
 #ifdef __DEBUG
-    std::cout << "Load icons theme \'" << themefile.text( ) << "\'" << std::endl;
+    std::cout << "[DEBUG] Load icons theme \'" << themefile.text( ) << "\'" << std::endl;
 #endif // __DEBUG
 
     // Read base informations about icon theme
@@ -133,7 +133,7 @@ void FXIconsTheme::load( const FXString &themefile )
     // Read a icons dictionary
     head = "Dict";
     if( data.existingSection( head ) ) { t_dict = data.at( head ); }
-  } else { std::cout << "Icons theme \'" << themefile.text( ) << "\' is NOT LOADED!" << std::endl;}
+  } else { std::cout << "[WARNING] FXIconsTheme::load: Icons theme \'" << themefile.text( ) << "\' is NOT LOADED!" << std::endl;}
 
   std::cout.flush( );
 }

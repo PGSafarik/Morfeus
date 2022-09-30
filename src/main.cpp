@@ -5,8 +5,8 @@
 int main( int argc, char **argv ) {
 
   #ifdef __DEBUG
-   std::cout << __FILE__ << " " << "::main( )" << std::endl;
-   std::cout << "Debug log enabled" << std::endl;
+   std::cout << "[DEBUG] " << __FILE__ << " " << "::main( )" << std::endl;
+   std::cout << "       * Debug log enabled" << std::endl;
   #endif // __DEBUG
 
   MW_App app( "Morfeus", "fox-desktop" );

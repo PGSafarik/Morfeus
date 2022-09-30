@@ -28,11 +28,18 @@ void MW_App::create( )
 
 void MW_App::init( int &argc, char **argv, FXbool connect )
 {
+  #ifdef __DEBUG
+  cout << "[DEBUG] Application Morfeus initialize... " << endl;
+  #endif // __DEBUG
   FXApp::init( argc, argv, connect );
 
   FXString filename = DecodeControlName( );
+  #ifdef __DEBUG
+  cout << "       * Parse XML File: " << filename.text( ) << endl;
+  #endif // __DEBUG
+
   m_xmldocument = new XMLDocument;
-  if( ( m_xmlstate = m_xmldocument->LoadFile( filename.text( ) ) ) == XML_SUCCESS  ) {
+  if( ( m_xmlstate = m_xmldocument->LoadFile( filename.text( ) ) ) == XML_SUCCESS  ) {    
    	m_xmlroot = m_xmldocument->RootElement( );
   }
 }
@@ -50,7 +57,7 @@ FXString MW_App::ValidatePath( const FXString &path )
 	    if( FXStat::exists( resh ) ) { return resh; }
 	  }
   }
-  std::cerr << "Validate path: " << path.text( ) << " not found!";
+  std::cerr << "[WARNING] Validate path: " << path.text( ) << " not found!";
   return FXString::null;
 }
 
@@ -72,6 +79,21 @@ void MW_App::WriteConfig( const FXString &key, const FXString &value )
   reg( ).writeStringEntry( m_xmlroot->Attribute( "title" ), key, value.text( ) );
 }
 
+void MW_App::settings_load( ) 
+{ 
+  reg( ).read( );
+
+  
+
+}
+
+void MW_App::settings_save( )
+{
+
+
+}
+
+
 /*************************************************************************************************/
 FXString MW_App::DecodeControlName( )
 {
@@ -89,7 +111,7 @@ FXString MW_App::DecodeControlName( )
   m_dirlist.append(  FXSystem::getHomeDirectory( ) + "/.local/share/games/morfeus/" );
 
   FXString appname = FXPath::name( this->getArgv( )[ 0 ] );
-  if( appname == "Morfeus" ) {
+  if( appname == "Morfeus" || appname == "morfeus" ) {
     FXString arg = this->getArgv( )[ 1 ];
     if(  arg == "-f" ) {
       FXString filename = this->getArgv( )[ 2 ];
@@ -116,6 +138,11 @@ FXString MW_App::FindControlFile( const FXString &name )
   FXString ext = name.right( 4 );
   FXString _n = ( ( ext == ".xml" ) ? name : name + ".xml" );
 
+  #ifdef __DEBUG
+   std::cout << "[DEBUG] " <<  __FILE__ << " " << "::FindControlFile( )" << std::endl;
+   std::cout << "       * Find file name: " << _n.text( ) << std::endl;
+  #endif // __DEBUG
+
   // Pruchod seznamem dostupnych adresaru
   FXint num = m_dirlist.no( );
   for( FXint i = 0; i != num; i++ ) {
@@ -131,12 +158,14 @@ FXString MW_App::FindControlFile( const FXString &name )
 
 void MW_App::ConsoleHeader( )
 {
-  std::cout << "=== Morfeus =============================" << std::endl;
-  std::cout << "Version BETA.02.00"                        << std::endl;
-  std::cout << "Developed with Code::Blocks."              << std::endl;
-  std::cout << "Using Fox library 1.7"                     << std::endl;
-  std::cout << "( C ) 2019 - 2022 D.A.Tiger by GNU GPL v3" << std::endl;
-  std::cout << "\n=== Messages ==========================" << std::endl;
+  std::cout << "=== Morfeus =========================================================" << std::endl;
+  std::cout << "Copyright (C) 2019 - " << Morfeus_Version::YEAR << " D.A.Tiger <drakarax@seznam.cz>, GNU GPL 3 " << std::endl; 
+  std::cout << "Version       : " << Morfeus_Version::MAJOR << "." << Morfeus_Version::MINOR << "." << Morfeus_Version::BUILD 
+            << " [" << Morfeus_Version::STATUS << "]" << std::endl;
+  std::cout << "lib Fox       : " << FOX_MAJOR << "." << FOX_MINOR << "." << FOX_LEVEL << std::endl;
+  std::cout << "lib FoxGHI    : " << 0 << "." << 2 << "." << 1 << std::endl;
+  std::cout << "lib TinyXML-2 : " << TINYXML2_MAJOR_VERSION << "." << TINYXML2_MINOR_VERSION << "." << TINYXML2_PATCH_VERSION << std::endl;
+  std::cout << "\n=== Messages ======================================================" << std::endl;
 }
 
 /*** END *****************************************************************************************/

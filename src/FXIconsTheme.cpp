@@ -78,6 +78,28 @@ FXString FXIconsTheme::at( const FXString &name, int size )
   return result;
 }
 
+FXIcon* FXIconsTheme::get_icon( const FXString &name, FXint size ) 
+{ 
+  FXIcon   *icon = NULL;
+  FXString  path = this->at( name, size ); 
+
+  if( !path.empty( ) ) { icon = t_cache->insert( path ); }
+  else { std::cerr << "[WARNING] FXIconsTheme::at: Nenalezena cesta k ikone jmenem: \'" << name.text( ) << "\'" << endl; }
+  
+  return icon;
+}
+
+FXIcon* FXIconsTheme::get_icon( XMLElement *thelem, const FXString &name, int size ) 
+{ 
+  FXIcon   *icon = NULL;
+  FXString  path = this->at( thelem, name, size ); 
+
+  if( !path.empty( ) ) { icon = t_cache->insert( path ); }
+  else { std::cerr << "[WARNING] FXIconsTheme::at: Nenalezena cesta k ikone jmenem: \'" << name.text( ) << "\'" << endl; }
+  
+  return icon;
+}
+
 FXIcon* FXIconsTheme::get_icon( const FXString &name, const FXString &size_alias )
 {
    FXint _size = 16;

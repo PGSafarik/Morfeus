@@ -22,9 +22,9 @@ MorfeusWindow::MorfeusWindow( FXApp *a )
 
   FXString icthpth = DEFAULT_THEME_PATH;
   FXString th_name = IC_FAENZA;
-  m_ict.load( icthpth + th_name );
+  //m_ict.load( icthpth + th_name );
 
-  m_icons = new FXIconCache( getApp( ) );
+  //m_icons = new FXIconCache( getApp( ) );
 
   m_procman    = new ProcessManager( getApp( ), this, MorfeusWindow::NOTIFY_PROCESS );
   m_xmlcurrent = NULL;

@@ -28,9 +28,9 @@ public:
 
 
 /*************************************************************************************************/
-FXIconsTheme::FXIconsTheme( )
+FXIconsTheme::FXIconsTheme( FXApp *app )
 {
-
+  t_cache = new FXIconCache( app, FXSystem::getHomeDirectory( ) );
 }
 
 FXIconsTheme::~FXIconsTheme( )
@@ -67,6 +67,13 @@ FXString FXIconsTheme::at( const FXString &name, int size )
   }
 
   return result;
+}
+
+FXIcon* FXIconsTheme::get_icon( const FXString &name, const FXString &size_alias )
+{
+   FXint _size = 16;
+   if( !_sizes.empty( ) ) { _size = _sizes.at( size_alias ); }
+   return get_icon( name, _size );
 }
 
 FXString FXIconsTheme::at( XMLElement *thelem, const FXString &name, int size )

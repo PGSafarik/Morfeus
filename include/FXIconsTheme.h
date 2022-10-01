@@ -51,11 +51,12 @@ public:
   FXString at( const FXString &name, int size );
   FXString at( XMLElement *thelem, const FXString &name, int size = 0 );
  
-  FXIcon* get_icon( const FXString &name, FXint size = 16 ) { return t_cache->insert( this->get_path( ) + "/" + this->at( name, size ) ); }
   FXIcon* get_icon( const FXString &name, const FXString &size_alias );
+  FXIcon* get_icon( const FXString &name, FXint size = 16 ) { return t_cache->insert( this->at( name, size ) ); }
+  FXIcon* get_icon( XMLElement *thelem, const FXString &name, int size = 0 ) { return t_cache->insert( this->at( thelem, name, size ) ); }
  
 
-  void load( const FXString &themefile );
+  void load( const FXString &themefile, const FXString &name );
   //void load( XMLElement *iconsel );
 };
 

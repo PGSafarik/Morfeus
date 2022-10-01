@@ -1,14 +1,16 @@
 #ifndef APPLICATION_H_INCLUDED
 #define APPLICATION_H_INCLUDED
 
+#include<FXIconsTheme.h>
 #include<define.h>
 
 class MW_App : public FXApp {
 FXDECLARE( MW_App )
   /*** Base ***/
+  FXIconsTheme *m_icons;  // The icons theme manager
 
   /*** ***/
-  FXint        m_cdir;		 // Index adresar s kontrolnim souborem
+  FXint        m_cdir;		   // Index adresar s kontrolnim souborem
   FXStringList m_dirlist;    // Seznam cest, v nichz se budou hledat kontrolni soubory
 
   /*** XML Document ***/
@@ -28,14 +30,16 @@ public:
   const FXString ReadConfig( const FXString &key, const FXString &def = "" );
   void           WriteConfig( const FXString &key, const FXString &value );
 
-   void settings_load( );
-   void settings_save( );
+  void settings_load( );
+  void settings_save( );
+
   /*** Access methods ***/
-  XMLError    getXMLstate( ) { return m_xmlstate; }
-  XMLElement* getXMLRoot( )  { return m_xmlroot;  }
+  XMLError      getXMLstate( ) { return m_xmlstate; }
+  XMLElement*   getXMLRoot( )  { return m_xmlroot;  }
 
-  FXString    getControlDir( ) { return ( ( m_cdir >= 0 ) ? m_dirlist[ m_cdir ] : FXString::null ); }
-
+  FXString      getControlDir( ) { return ( ( m_cdir >= 0 ) ? m_dirlist[ m_cdir ] : FXString::null ); }
+  FXIconsTheme* getIconsTheme( ) { return m_icons; }
+  
 protected :
   /*** Helpers methods ***/
   FXString    DecodeControlName( );

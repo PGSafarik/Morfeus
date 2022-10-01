@@ -34,8 +34,8 @@ FXDECLARE( MorfeusWindow )
   FXbool       m_created;    // true - Indikuje, ze jiz probehla faze Morfeus::create( ) - nutne kvuli obrazkum a ikonam.
 
   /*** System ***/
-  FXIconsTheme        m_ict;      // Zprava tematu ikon
-  FXIconCache        *m_icons;    // Uloziste ikon v pameti
+  FXIconsTheme        *m_ict;      // Zprava tematu ikon
+  //FXIconCache        *m_icons;    // Uloziste ikon v pameti
   FXStringDictionary  m_envdict;  // Seznam promenych prostredi
   ProcessManager     *m_procman;
 

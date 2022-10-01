@@ -9,10 +9,13 @@ MW_App::MW_App( const FXString &name, const FXString &vendor )
       : FXApp( name, vendor )
 {
   ConsoleHeader( );
+  m_icons = new FXIconsTheme( this );
 
   m_xmldocument = NULL;
   m_xmlroot     = NULL;
   m_xmlstate    = XML_ERROR_FILE_NOT_FOUND;
+
+  settings_load( );
 }
 
 MW_App::~MW_App( )
@@ -83,7 +86,11 @@ void MW_App::settings_load( )
 { 
   reg( ).read( );
 
-  
+  // GUI Icons theme
+  FXString icons_name, icons_map; 
+  icons_name = reg( ).readStringEntry( "Theme", "icons", DEFAULT_IC_THEME_NAME );
+  icons_map  = reg( ).readStringEntry( "Theme", "imap",  DEFAULT_IC_THEME_PATH );
+  m_icons->load( icons_map, icons_name );  
 
 }
 

@@ -20,12 +20,6 @@ MorfeusWindow::MorfeusWindow( FXApp *a )
   /// initialize //////////////////////////////
   new FXToolTip( getApp( ) );
 
-  FXString icthpth = DEFAULT_THEME_PATH;
-  FXString th_name = IC_FAENZA;
-  //m_ict.load( icthpth + th_name );
-
-  //m_icons = new FXIconCache( getApp( ) );
-
   m_procman    = new ProcessManager( getApp( ), this, MorfeusWindow::NOTIFY_PROCESS );
   m_xmlcurrent = NULL;
   m_created    = false;
@@ -93,12 +87,15 @@ FXbool MorfeusWindow::Initialize( )
   XMLElement *xml_root = NULL;
   FXbool resh   = false;
   MW_App *a     = MORFEUS_APP( );
+  
+
   m_xmlservices = NULL;
   m_xmlui       = NULL;
   m_xmlictheme  = NULL;
 
   if( a->getXMLstate( ) == XML_SUCCESS ) {
     FXWindowHeader *wh = getHeader( );
+    m_ict = a->getIconsTheme( );    
 
     xml_root      = a->getXMLRoot( );
     m_xmlservices = xml_root->FirstChildElement( "Services" );
@@ -364,17 +361,18 @@ FXIcon* MorfeusWindow::GetIcon( const FXString &name, int size )
 // Vrati instanci ikony ze slovniku ikonoveho tematu. Pokud ikona jeste nebyla pred tim pouzite,
 // bude zarazen do iconcahe a odtud bude nadale vracena kdykoliv o ni bude pozdeji pozadano. V
 // pripade neuspechu vraci NULL
+// #name[:size]
+
 
   if( name.empty( ) ) { return NULL; }
+
   #ifdef __DEBUG
   cout << "[DEBUG] Load icon: " << name.text( ) << endl;
   #endif // __DEBUG
   FXIcon   *icon = NULL;
-  FXString  icon_path = FXString::null;
+  
 
-  if( name[ 0 ] != '#' ) {
-    icon_path = m_ict.at( m_xmlictheme, name );
-  }
+  if( name[ 0 ] != '#' ) { icon = m_ict->get_icon( m_xmlictheme, name ); }
   else {
 	  FXString ic_name, ic_size;
 	  FXint sep = name.find( ':' );
@@ -382,23 +380,19 @@ FXIcon* MorfeusWindow::GetIcon( const FXString &name, int size )
 	  if( sep > 0 ) {
 	    ic_name = name.mid( 1, sep - 1 );
 	    ic_size = name.right( ( name.length( ) - sep ) - 1 );
-	    icon_path = m_ict.at( ic_name, ic_size.toInt( ) );
+      icon = m_ict->get_icon( ic_name, ic_size.toInt( ) );
 	  }
 	  else {
 	    ic_name = name.mid( 1, name.length( ) );
-	    icon_path = m_ict.at( ic_name, size );
+      icon = m_ict->get_icon( ic_name, size );
 	  }
   }
 
-  if( !icon_path.empty( ) ) {
-	  icon = m_icons->insert( icon_path );
-	  #ifdef __DEBUG
-    if( !icon ) { cout << "[DEBUG] Icon " << name.text( ) << "NOT CREATED!" << endl; }
-    #endif // __DEBUG
-
-	  if( m_created ) { icon->create( ); }
+  if( icon ) { 
+    if( m_created ) { icon->create( ); }
   }
-
+  else { cout << "[WARNING] Icon " << name.text( ) << " NOT CREATED!" << endl; } 
+  
   return icon;
 }
 
@@ -426,9 +420,9 @@ FXIcon* MorfeusWindow::GetIconCopy( const FXString &name, int size )
 void MorfeusWindow::ShowMenuIcon( FXIcon *ic )
 {
    FXIcon *menu_ic = NULL;
-   if( !ic ) { cout << "[WARNING] Icon not set" << endl; }
-   menu_ic = ( ic ? ic : this->getIcon( ) );													   // FXWindow::getIcon( )      -> Vrati ikonu ktera je aktualne oknu nastavena
-   m_menu->setIcon( ( menu_ic ? menu_ic : getMenuIcon( ) ) );									   // FXGWindow::getMenuIcon( ) -> Vrati preddefinovanou ikonu urcenou pro hlavni menu
+   if( !ic ) { cout << "[WARNING] MorfeusWindow::ShowMenuIcon - Icon not set" << endl; }
+   menu_ic = ( ic ? ic : this->getIcon( ) );									 // FXWindow::getIcon( )      -> Vrati ikonu ktera je aktualne oknu nastavena
+   m_menu->setIcon( ( menu_ic ? menu_ic : getMenuIcon( ) ) );	 // FXGWindow::getMenuIcon( ) -> Vrati preddefinovanou ikonu urcenou pro hlavni menu
 }
 
 /*** Helpers methods *****************************************************************************/

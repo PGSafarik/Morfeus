@@ -50,8 +50,12 @@ FXString FXIconsTheme::at( const FXString &name, int size )
 {
   FXString result = FXString::null;
   FXString tr = t_dict[ name ];
-
+ 
   if( !tr.empty( ) ) {
+    #ifdef __DEBUG
+    std::cout << "[DEBUG] FXIconsTheme::at: Find path icon file \'" << name.text( ) << "\' with size \'" << size << "\'" << std::endl;
+    #endif // __DEBUG
+    
     FXint pos = tr.find( "/" );
     FXString i_sect = tr.left( pos );
     FXString i_name = tr.mid( pos + 1, tr.length( ) );
@@ -63,8 +67,13 @@ FXString FXIconsTheme::at( const FXString &name, int size )
     macro.insert( "${EXP}",  t_prefix );
 
     // We have everything we need - We will start replacing the pattern with values
-    result = t_path + macro( t_pattern );
+    result = t_path + "/" + macro( t_pattern );
   }
+
+  #ifdef __DEBUG
+  std::cout << "[DEBUG] FXIconsTheme::at: Value of \'" << name.text( ) << "\' is \'" << tr.text( ) << "\'" << std::endl;
+  std::cout << "[DEBUG] FXIconsTheme::at: Path is " << result.text( ) << std::endl; 
+  #endif // __DEBUG
 
   return result;
 }
@@ -118,29 +127,41 @@ FXString FXIconsTheme::at( XMLElement *thelem, const FXString &name, int size )
   return result;
 }
 
-void FXIconsTheme::load( const FXString &themefile )
+void FXIconsTheme::load( const FXString &themefile, const FXString &name )
 {
   FXSettings data;
   FXString   head;
 
   t_dict.clear( );
+  t_sizes.clear( );
+  t_cache->clear( );
+  t_list.clear( );
+
+  #ifdef __DEBUG
+  std::cout << "Load icons theme \'" << name.text( ) << "\' from \'" << themefile.text( ) << "\' mapfile" << std::endl;
+  #endif // __DEBUG
 
   if( FXStat::exists( themefile ) && data.parseFile( themefile ) ) {
-#ifdef __DEBUG
-    std::cout << "[DEBUG] Load icons theme \'" << themefile.text( ) << "\'" << std::endl;
-#endif // __DEBUG
+    if ( data.existingSection( "Sizes" ) ) {
+      FXStringDictionary sm = data.at( "Sizes" );
+      for( FXint i = 0; i != sm.no( ); i++ ) {
+        FXString k = sm.key( i );
+        if( !k.empty( ) ) {
+          FXint value =  sm.data( i ).toInt( );
+          _sizes.insert( std::pair<FXString, int>( k, value ) );
+        }
+      }
+    } 
+    else { std::cout << "[WARNING] FXIconsTheme::load: The size definitions section not found!" << std::endl;}
 
-    // Read base informations about icon theme
-    head = "Theme";
-    t_name    = data.readStringEntry( head, "name" );
-    t_prefix  = data.readStringEntry( head, "prefix", "png" );
-    t_path    = data.readStringEntry( head, "path" );
-    t_pattern = data.readStringEntry( head, "pattern" );
 
-    // Read a icons dictionary
-    head = "Dict";
-    if( data.existingSection( head ) ) { t_dict = data.at( head ); }
-  } else { std::cout << "[WARNING] FXIconsTheme::load: Icons theme \'" << themefile.text( ) << "\' is NOT LOADED!" << std::endl;}
+    // Read base informations about icon theme    
+    t_prefix  = data.readStringEntry( name, "map.type", "png" );
+    t_path    = data.readStringEntry( name, "map.path" );
+    t_pattern = data.readStringEntry( name, "map.pattern" );
+    t_dict    = data.at( name );
+  } 
+  else { std::cout << "[WARNING] FXIconsTheme::load: Select icons theme is NOT LOADED!" << std::endl;}
 
   std::cout.flush( );
 }

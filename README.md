@@ -54,10 +54,10 @@ If you have the library installed in a location other than the standard one, thi
 These lines are commented out by default, so remove the leading '#' characters after editing, and then save the file. Next, follow the instructions for building and installing the project above as normal.
 
 ## 3. KNOWN ERRORS AND BUGS
-* 27/09/2022 - No load control file from CMD  - FIXED, CLOSED 30/09/2022  
+* ### 27/09/2022 - No load control file from CMD  - FIXED, CLOSED 30/09/2022  
   When entering (only) the name of the control file from CMD, Morfeus does not load it.  
   RESOLUTION: The error was in checking the name under which Morfeus was run. This led to the program mistakenly thinking it was running over a link.  
-* 30/09/2022 - IconTheme no Load feanza.cfg  - FIXED, CLOSED 01/10/22  
+* ### 30/09/2022 - IconTheme no Load feanza.cfg  - FIXED, CLOSED 01/10/22  
   RESOLUTIN: The icon manager will be overwritten
   
 ## 4. PROJECT STATE AND PLANS FOR THE FUTHURE

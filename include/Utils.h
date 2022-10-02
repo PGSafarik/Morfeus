@@ -5,8 +5,8 @@
 * Author(s): D.A.Tiger ( drakarax@seznam.cz )                                                      *
 * Note:      The internal simle utils for Morfeus application                                      *
 ***************************************************************************************************/
-#ifndef DEFINE_H_INCLUDED
-#define DEFINE_H_INCLUDED
+#ifndef UTILS_H_INCLUDED
+#define UTILS_H_INCLUDED
 /*************************************************************************
 * This program is free software: you can redistribute it and/or modify   *
 * it under the terms of the GNU General Public License as published by   *
@@ -21,12 +21,8 @@
 * You should have received a copy of the GNU General Public License      *
 * along with this program.  If not, see <https://www.gnu.org/licenses/>. *
 *************************************************************************/
-
 #include<fox-1.7/fx.h>
 #include<define.h>
-
-#ifndef __UTILS_H
-#define __UTILS_H
 
 /*** Types utils *****************************/
   class MArgumentsList : public FXArray<const FXchar*> {

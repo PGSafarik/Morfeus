@@ -25,9 +25,6 @@
 #include<map>
 #include<define.h>
 
-#ifndef __FXICONTHEME_H
-#define __FXICONTHEME_H
-
 typedef FXDictionaryOf<FXint>     FXSizesMap;
 typedef std::map<FXString, FXint> __SizeMap; 
 typedef FXArray<FXString>         FXStringList;

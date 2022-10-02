@@ -61,8 +61,9 @@ These lines are commented out by default, so remove the leading '#' characters a
   RESOLUTIN: The icon manager will be overwritten
   
 ## 4. PROJECT STATE AND PLANS FOR THE FUTHURE
-Actual version: 0.3.1 ALFA
+Actual version: 0.3.1 ALFA  
 
+It will be in the near future  
 * Create user manual
 * Enable context merging from different control files
 * Environment Variables

@@ -1,5 +1,5 @@
 # Morfeus - Universal GUI launcher for games and engines
--01.10.2022-
+-31.10.2022-
 
 *Content:*
   1. [General info](#1-general-info)

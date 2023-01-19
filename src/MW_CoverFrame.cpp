@@ -29,8 +29,8 @@ MW_CoverFrame::MW_CoverFrame( FXComposite *p, FXuint opts, FXint x, FXint y, FXi
   MW_App *a = dynamic_cast<MW_App*>( getApp( ) );
 
   if( a->getXMLstate( ) == XML_SUCCESS  ) {
-	XMLElement *root = a->getXMLRoot( );
-	m_xmlCoversMap   = root->FirstChildElement( "Theme:Covers" );
+	  XMLElement *root = a->getXMLRoot( );
+	  m_xmlCoversMap   = root->FirstChildElement( "Theme:Covers" );
   }
 
   m_created = false;
@@ -55,21 +55,32 @@ void MW_CoverFrame::showImage( const FXString &name )
   FXString f     = FXString::null;
 
   #ifdef __DEBUG
-  cout << "[DEBUG] Show image of name: " << name.text( ) << endl;
+  cout << "[DEBUG MW_CoverFrame::showImage] Show image of entry name: " << name.text( ) << endl;
   #endif // __DEBUG
+
   if( m_xmlCoversMap ) {
-	XMLElement *e = m_xmlCoversMap->FirstChildElement( name.text( ) );
-	if( !e ) { e = m_xmlCoversMap->FirstChildElement( ); }
+	  XMLElement *e = m_xmlCoversMap->FirstChildElement( name.text( ) );
+	  if( !e ) { e = m_xmlCoversMap->FirstChildElement( ); }
 
-	if( e ) {
-	  /// FIXME CF_01: Adding control path of the image file, immediately after move the method
-	  ///              ValidatePath( ) from MorfeusWindow class to the FXApp class.
-	  f = e->Attribute( "file" ); // getApp( )->ValidatePath( e->Attribute( 'file' ) );
-	}
+	  if( e ) {
+	    /// FIXME CF_01: Adding control path of the image file, immediately after move the method
+	    ///              ValidatePath( ) from MorfeusWindow class to the FXApp class.
+	    f = e->Attribute( "file" ); // getApp( )->ValidatePath( e->Attribute( 'file' ) );
+      #ifdef __DEBUG
+      cout << "[DEBUG MW_CoverFrame::showImage] Cover image of entry name: " << name.text( ) << "its " << f.text( ) << endl;
+      #endif // __DEBUG
+   
+	    if( f.empty( ) ) {
+         std::cout << "[WARNING] Entry " << name.text( ) << "not have a cover image" << std::endl; 
+         return; 
+      }
+      if( !FXStat::exists( f ) ) { 
+         std::cout << "[WARNING] Cover image file " << f.text( ) << " not found" << std::endl; 
+         return; 
+      }
 
-    if( !f.empty( ) ) {
-	  if( ( image = m_covers->insert( f ) ) != NULL ) {
-	    if( !this->shown( ) ) {	this->show( ); }
+	    if( ( image = m_covers->insert( f ) ) != NULL ) {
+	      if( !this->shown( ) ) {	this->show( ); }
 
 	    /// FIXME CF_02 : Resizing / scaling a image not function - deformate the image. Repair it.
         /*
@@ -87,14 +98,19 @@ void MW_CoverFrame::showImage( const FXString &name )
         */
 
         if( m_created ) { image->create( ); }
-	    this->setImage( image );
-	  }
+	      this->setImage( image );
+      }    
     }
-    else {
-	  if( !this->getImage( ) && this->shown( ) ) {
-	    this->hide( );
-	  }
-    }
+    else { 
+      #ifdef __DEBUG
+      cout << "[DEBUG MW_CoverFrame::showImage] Cover image of entry name: " << name.text( ) << " not set" << endl;
+      #endif // __DEBUG
+    } 
+  }
+
+  if( !this->getImage( ) && this->shown( ) ) {
+    std::cout << "[WARNING] Not find a cover image for entry: " << name.text( ) << "std::endl" << std::endl; 
+    this->hide( );
   }
 }
 

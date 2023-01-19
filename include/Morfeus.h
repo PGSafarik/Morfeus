@@ -30,7 +30,7 @@
 
 class MW_ContextBox;
 
-class MorfeusWindow : public FXGWindow {
+class MorfeusWindow : public FXPrimaryWindow {
 FXDECLARE( MorfeusWindow )
   /*** GUI ***/
   FXButton          *m_launch; // GO!
@@ -83,7 +83,7 @@ public :
 // GUI event messages
 //
   enum {
-    ID_LAUNCH = FXGWindow::ID_LAST,  // Spustit vybranou akci hry (applikace)
+    ID_LAUNCH = FXPrimaryWindow::ID_LAST,  // Spustit vybranou akci hry (applikace)
     ID_CONFIG,                             // Spustit configuracni script/appku
     ID_EXIT,                               // Ukoncit Morfea
     NOTIFY_PROCESS,

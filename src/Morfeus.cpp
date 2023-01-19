@@ -25,13 +25,13 @@ FXDEFMAP( MorfeusWindow ) MWM[ ] = {
   FXMAPFUNC(  SEL_COMMAND,     MorfeusWindow::ID_LIST,        MorfeusWindow::OnCld_List ),
   FXMAPFUNC(  SEL_COMMAND,     MorfeusWindow::ID_ABOUT,       MorfeusWindow::OnCmd_About )
 };
-FXIMPLEMENT( MorfeusWindow, FXGWindow, MWM, ARRAYNUMBER( MWM ) )
+FXIMPLEMENT( MorfeusWindow, FXPrimaryWindow, MWM, ARRAYNUMBER( MWM ) )
 
 #define MORFEUS_APP( ) ( dynamic_cast<MW_App*>( this->getApp( ) ) )
 
 /*************************************************************************************************/
 MorfeusWindow::MorfeusWindow( FXApp *a )
-             : FXGWindow( a, "Morfeus", NULL, NULL, CONTROLS_STATIC | WINDOW_PRIMARY | WINDOW_STATIC | WINDOW_CLIENTSIZE, 0, 0, 500, 350 )
+             : FXPrimaryWindow( a, "Morfeus", NULL, NULL, CONTROLS_STATIC | WINDOW_MAIN | WINDOW_STATIC | WINDOW_CLIENTSIZE, 0, 0, 500, 350 )
 {
   /// initialize //////////////////////////////
   new FXToolTip( getApp( ) );
@@ -78,7 +78,7 @@ void MorfeusWindow::create( )
 {
    MW_App *a = MORFEUS_APP( );
 
-   FXGWindow::create( );
+   FXPrimaryWindow::create( );
    this->show( PLACEMENT_SCREEN );
    m_created = true; /// :'(
 
@@ -241,6 +241,8 @@ FXint MorfeusWindow::menu( FXMenuPane *pane, XMLElement *mel )
 void MorfeusWindow::SetCurrent( XMLElement *entry )
 {
   if( m_xmlcurrent != entry ) {
+    cout << "[DEBUG MorfeusWindow::SetCurrent] Actual: " << ( ( m_xmlcurrent ) ? m_xmlcurrent->Name( ) : "NULL" ) << "; Set : " << entry->Name( ) << endl;
+
 	  m_xmlcurrent = entry;
 
 	  // Set button text, if-any
@@ -438,7 +440,7 @@ void MorfeusWindow::ShowMenuIcon( FXIcon *ic )
    FXIcon *menu_ic = NULL;
    if( !ic ) { cout << "[WARNING] MorfeusWindow::ShowMenuIcon - Icon not set" << endl; }
    menu_ic = ( ic ? ic : this->getIcon( ) );									 // FXWindow::getIcon( )      -> Vrati ikonu ktera je aktualne oknu nastavena
-   m_menu->setIcon( ( menu_ic ? menu_ic : getMenuIcon( ) ) );	 // FXGWindow::getMenuIcon( ) -> Vrati preddefinovanou ikonu urcenou pro hlavni menu
+   m_menu->setIcon( ( menu_ic ? menu_ic : getMenuIcon( ) ) );	 // FXPrimaryWindow::getMenuIcon( ) -> Vrati preddefinovanou ikonu urcenou pro hlavni menu
 }
 
 /*** Helpers methods *****************************************************************************/

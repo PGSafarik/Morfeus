@@ -24,7 +24,7 @@
 #include<define.h>
 #include<fxghi.h>
 
-class AboutBox : public FXGDialogBox {
+class AboutBox : public FXSecondaryWindow {
 FXDECLARE( AboutBox )
 
 public:

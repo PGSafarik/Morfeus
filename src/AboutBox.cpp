@@ -16,11 +16,11 @@
 *************************************************************************/
 #include<AboutBox.h>
 
-FXIMPLEMENT( AboutBox, FXGDialogBox, NULL, 0 );
+FXIMPLEMENT( AboutBox, FXSecondaryWindow, NULL, 0 );
 
 /*************************************************************************************************/
 AboutBox::AboutBox( FXApp *a, XMLElement *links )
-        : FXGDialogBox( a, "About Morfeus", WINDOW_STATIC, 0, 0, 400, 200 )
+        : FXSecondaryWindow( a, "About Morfeus", WINDOW_STATIC, 0, 0, 400, 200 )
 {
   FXString ver_str = "Version: ";
   //ver_str += FXString::value( Morfeus_VERSION_MAJOR ) + "." + FXString::value( Morfeus_VERSION_MINOR );
@@ -43,6 +43,6 @@ AboutBox::~AboutBox( )
 
 void AboutBox::create( )
 {
-  FXGDialogBox::create( );
+  FXSecondaryWindow::create( );
   show( PLACEMENT_SCREEN );
 }

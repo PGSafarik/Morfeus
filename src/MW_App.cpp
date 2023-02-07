@@ -114,15 +114,8 @@ FXString MW_App::DecodeControlName( )
     absolutni cestu ( z nazvu linku, nebo z parametru programu )
   */
   FXString filename = FXString::null;
-
   m_cdir = -1;
-/*
-  m_dirlist.append( "/usr/share/morfeus/" );
-  m_dirlist.append( "/usr/share/games/morfeus/" );
-  m_dirlist.append( "/usr/local/share/morfeus/" );
-  m_dirlist.append( "/usr/local/share/games/morfeus/" );
-  m_dirlist.append(  FXSystem::getHomeDirectory( ) + "/.local/share/games/morfeus/" );
-*/
+
   FXString appname = FXPath::name( this->getArgv( )[ 0 ] );
   if( appname == "Morfeus" || appname == "morfeus" ) {
     FXString arg = this->getArgv( )[ 1 ];

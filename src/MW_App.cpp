@@ -30,8 +30,6 @@ MW_App::MW_App( const FXString &name, const FXString &vendor )
   m_xmldocument = NULL;
   m_xmlroot     = NULL;
   m_xmlstate    = XML_ERROR_FILE_NOT_FOUND;
-
-  settings_load( );
 }
 
 MW_App::~MW_App( )
@@ -40,22 +38,32 @@ MW_App::~MW_App( )
   std::cout << "\n=== Bye! ==============================" << std::endl;
 }
 
-void MW_App::create( )
-{
-  FXApp::create( );
-}
 
 void MW_App::init( int &argc, char **argv, FXbool connect )
 {
   #ifdef __DEBUG
-  cout << "[DEBUG] Application Morfeus initialize... " << endl;
+  cout << "[DEBUG - MW_App::init] Initialize application instance... " << endl;
   #endif // __DEBUG
   FXApp::init( argc, argv, connect );
+  reg( ).read( );
+
+  #ifdef __DEBUG
+  cout << "[DEBUG - MW_App::init] Loading a icons theme... " << endl;
+  #endif // __DEBUG
+  FXString icons_name = reg( ).readStringEntry( "Theme", "icons", DEFAULT_IC_THEME_NAME );
+  FXString icons_map  = reg( ).readStringEntry( "Theme", "imap",  DEFAULT_IC_THEME_PATH );
+  m_icons->load( icons_map, icons_name );
+
+  #ifdef __DEBUG
+  cout << "[DEBUG - MW_App::init] Loading the XML control file... " << endl;
+  #endif // __DEBUG
+  m_dirlist.append( "/usr/share/morfeus/" );
+  m_dirlist.append( "/usr/share/games/morfeus/" );
+  m_dirlist.append( "/usr/local/share/morfeus/" );
+  m_dirlist.append( "/usr/local/share/games/morfeus/" );
+  m_dirlist.append(  FXSystem::getHomeDirectory( ) + "/.local/share/games/morfeus/" );
 
   FXString filename = DecodeControlName( );
-  #ifdef __DEBUG
-  cout << "       * Parse XML File: " << filename.text( ) << endl;
-  #endif // __DEBUG
 
   m_xmldocument = new XMLDocument;
   if( ( m_xmlstate = m_xmldocument->LoadFile( filename.text( ) ) ) == XML_SUCCESS  ) {    
@@ -98,25 +106,6 @@ void MW_App::WriteConfig( const FXString &key, const FXString &value )
   reg( ).writeStringEntry( m_xmlroot->Attribute( "title" ), key, value.text( ) );
 }
 
-void MW_App::settings_load( ) 
-{ 
-  reg( ).read( );
-
-  // GUI Icons theme
-  FXString icons_name, icons_map; 
-  icons_name = reg( ).readStringEntry( "Theme", "icons", DEFAULT_IC_THEME_NAME );
-  icons_map  = reg( ).readStringEntry( "Theme", "imap",  DEFAULT_IC_THEME_PATH );
-  m_icons->load( icons_map, icons_name );  
-
-}
-
-void MW_App::settings_save( )
-{
-
-
-}
-
-
 /*************************************************************************************************/
 FXString MW_App::DecodeControlName( )
 {
@@ -127,12 +116,13 @@ FXString MW_App::DecodeControlName( )
   FXString filename = FXString::null;
 
   m_cdir = -1;
+/*
   m_dirlist.append( "/usr/share/morfeus/" );
   m_dirlist.append( "/usr/share/games/morfeus/" );
   m_dirlist.append( "/usr/local/share/morfeus/" );
   m_dirlist.append( "/usr/local/share/games/morfeus/" );
   m_dirlist.append(  FXSystem::getHomeDirectory( ) + "/.local/share/games/morfeus/" );
-
+*/
   FXString appname = FXPath::name( this->getArgv( )[ 0 ] );
   if( appname == "Morfeus" || appname == "morfeus" ) {
     FXString arg = this->getArgv( )[ 1 ];
@@ -145,6 +135,10 @@ FXString MW_App::DecodeControlName( )
       } else { return FXString::null; }             /* Neni z ceho odvodit nazev kontrolniho souboru    */
     } else { filename = FindControlFile( arg  ); }  /* Nazev souboru se odvodi z argumentu              */
   } else { filename = FindControlFile( appname ); } /* Nazev souboru se odvodi z nazvu odkazu na Morfea */
+
+  #ifdef __DEBUG
+  cout << "       * Parse XML File: " << filename.text( ) << endl;
+  #endif // __DEBUG
 
   return filename;
 }

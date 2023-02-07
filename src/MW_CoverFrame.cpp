@@ -88,7 +88,7 @@ void MW_CoverFrame::showImage( const FXString &name )
 	    FXint w, h;
 	    FXbool r = false;
 
-        FXint f_width  = this->getWidth( );
+      FXint f_width  = this->getWidth( );
 	    FXint f_height = this->getHeight( );
 	    w = image->getWidth( );
 	    h = image->getHeight( );

@@ -38,6 +38,10 @@
   extern FXint    split( const FXString &src, FXStringList *buffer, const FXString &sep = ";" );
   extern FXString pack( FXStringList *src, const FXString &sep = ";" );
 
+  extern FX::FXString& operator <<( FX::FXString &dest, const std::string &source );
+  extern std::string& operator <<( std::string &dest, const FX::FXString &source );
+
+
 /*** System tools ********************************************************************************/
   extern void SetEnvironment( FXStringDictionary *dict );
 

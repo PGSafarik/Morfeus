@@ -112,6 +112,24 @@ FXString /*Mps::*/pack( FXStringList *src, const FXString &sep )
   return str;
 }
 
+FX::FXString& operator <<( FX::FXString &dest, const std::string &source ) {
+  if( !source.empty( ) ) {
+    int len = source.size( );
+    dest.length( len );
+    source.copy( dest.text( ), len ); 
+  }   
+  else { dest = FXString::null; }
+
+  return dest;
+}
+
+std::string& operator <<( std::string &dest, const FX::FXString &source ) {
+  if( !source.empty( ) ) { dest.assign( source.text( ) ); } 
+  else { dest = ""; }
+  
+  return dest;
+}
+
 /*************************************************************************************************/
 
 /*

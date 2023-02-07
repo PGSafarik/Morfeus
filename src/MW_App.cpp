@@ -25,10 +25,14 @@ MW_App::MW_App( const FXString &name, const FXString &vendor )
       : FXApp( name, vendor )
 {
   ConsoleHeader( );
+
+  m_created = m_initialized = false;
+
   m_icons = new FXIconsTheme( this );
 
   m_xmldocument = NULL;
   m_xmlroot     = NULL;
+  m_xml_icons   = NULL;
   m_xmlstate    = XML_ERROR_FILE_NOT_FOUND;
 }
 
@@ -38,6 +42,11 @@ MW_App::~MW_App( )
   std::cout << "\n=== Bye! ==============================" << std::endl;
 }
 
+void MW_App::create( )
+{
+  FXApp::create( );
+  m_created = true;
+}
 
 void MW_App::init( int &argc, char **argv, FXbool connect )
 {
@@ -67,8 +76,11 @@ void MW_App::init( int &argc, char **argv, FXbool connect )
 
   m_xmldocument = new XMLDocument;
   if( ( m_xmlstate = m_xmldocument->LoadFile( filename.text( ) ) ) == XML_SUCCESS  ) {    
-   	m_xmlroot = m_xmldocument->RootElement( );
+   	m_xmlroot   = m_xmldocument->RootElement( );
+    m_xml_icons = m_xmlroot->FirstChildElement( "Theme:Icons" );
   }
+
+  m_initialized = true;
 }
 
 FXString MW_App::ValidatePath( const FXString &path )
@@ -84,7 +96,7 @@ FXString MW_App::ValidatePath( const FXString &path )
 	    if( FXStat::exists( resh ) ) { return resh; }
 	  }
   }
-  std::cerr << "[WARNING] Validate path: " << path.text( ) << " not found!";
+  std::cerr << "[WARNING] Validate path: " << path << " not found!";
   return FXString::null;
 }
 
@@ -104,6 +116,51 @@ const FXString MW_App::ReadConfig( const FXString &key, const FXString &def )
 void MW_App::WriteConfig( const FXString &key, const FXString &value )
 {
   reg( ).writeStringEntry( m_xmlroot->Attribute( "title" ), key, value.text( ) );
+}
+
+
+FXIcon* MW_App::getIcon( const FXString &name, int size )
+{
+// Vrati instanci ikony uvedenou v ridicim souboru. Funkce si precte informace o pozadavane ikone
+// z elemntu <Theme:Icons>. Dokaze rozlisit podle pocatacniho znaku '#' ze je pozadovana ikona z
+// preddefinovaneho tematu (viz popis ridiciho XML souboru v dokumentaci)
+//
+// Vrati instanci ikony ze slovniku ikonoveho tematu. Pokud ikona jeste nebyla pred tim pouzite,
+// bude zarazen do iconcahe a odtud bude nadale vracena kdykoliv o ni bude pozdeji pozadano. V
+// pripade neuspechu vraci NULL
+// #name[:size]
+
+
+  if( name.empty( ) ) { return NULL; }
+
+  #ifdef __DEBUG
+  cout << "[DEBUG] Load icon: " << name.text( ) << endl;
+  #endif // __DEBUG
+  FXIcon   *icon = NULL;
+  
+
+  if( name[ 0 ] != '#' ) { icon = m_icons->get_icon( m_xml_icons, name ); }
+  else {
+	  FXString ic_name, ic_size;
+	  FXint sep = name.find( ':' );
+
+	  if( sep > 0 ) {
+	    ic_name = name.mid( 1, sep - 1 );
+	    ic_size = name.right( ( name.length( ) - sep ) - 1 );
+      icon = m_icons->get_icon( ic_name, ic_size.toInt( ) );
+	  }
+	  else {
+	    ic_name = name.mid( 1, name.length( ) );
+      icon = m_icons->get_icon( ic_name, size );
+	  }
+  }
+
+  if( icon ) { 
+    if( m_created ) { icon->create( ); }
+  }
+  else { cout << "[WARNING] Icon " << name << " NOT CREATED!" << endl; } 
+  
+  return icon;
 }
 
 /*************************************************************************************************/
@@ -130,7 +187,7 @@ FXString MW_App::DecodeControlName( )
   } else { filename = FindControlFile( appname ); } /* Nazev souboru se odvodi z nazvu odkazu na Morfea */
 
   #ifdef __DEBUG
-  cout << "       * Parse XML File: " << filename.text( ) << endl;
+  cout << "       * Parse XML File: " << filename  << endl;
   #endif // __DEBUG
 
   return filename;
@@ -150,7 +207,7 @@ FXString MW_App::FindControlFile( const FXString &name )
 
   #ifdef __DEBUG
    std::cout << "[DEBUG] " <<  __FILE__ << " " << "::FindControlFile( )" << std::endl;
-   std::cout << "       * Find file name: " << _n.text( ) << std::endl;
+   std::cout << "       * Find file name: " << _n << std::endl;
   #endif // __DEBUG
 
   // Pruchod seznamem dostupnych adresaru

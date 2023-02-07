@@ -27,21 +27,26 @@
 class MW_App : public FXApp {
 FXDECLARE( MW_App )
   /*** Base ***/
-  FXIconsTheme *m_icons;  // The icons theme manager
+  FXbool       m_created;     // TRUE - Application is craated (i.e. the create function has been successfully executed)   
+  FXbool       m_initialized; // TRUE - Application is initialized (i.e. the init function has been successfully executed )   
 
   FXint        m_cdir;		   // Index adresar s kontrolnim souborem
   FXStringList m_dirlist;    // Seznam cest, v nichz se budou hledat kontrolni soubory
-    
+
+  FXIconsTheme *m_icons;    // The icons theme manager    
+
   /*** XML Document ***/
   XMLError     m_xmlstate;
   XMLDocument *m_xmldocument;
   XMLElement  *m_xmlroot;
+  XMLElement  *m_xml_icons;
 
 public:
   MW_App( const FXString &name= "Application", const FXString &vendor = FXString::null );
   virtual ~MW_App( );
 
   /*** Operations ***/
+  virtual void create( ); 
   virtual void init( int &argc, char **argv, FXbool connect = true );
   FXString     ValidatePath( const FXString &path );
 
@@ -54,13 +59,13 @@ public:
 
   FXString      getControlDir( ) { return ( ( m_cdir >= 0 ) ? m_dirlist[ m_cdir ] : FXString::null ); }
   FXIconsTheme* getIconsTheme( ) { return m_icons; }
-  
+  FXIcon*       getIcon( const FXString &name, FXint size = 16 );
+
 protected :
   /*** Helpers methods ***/
   FXString    DecodeControlName( );
   FXString    FindControlFile( const FXString &name );
   void        ConsoleHeader( );
 };
-
 
 #endif // APPLICATION_H_INCLUDED

@@ -44,8 +44,6 @@
   extern std::ostream& operator <<( std::ostream &store, const FX::FXString &str );
   extern std::istream& operator >>( std::istream &store, FX::FXString &str );
 
-
-
 /*** System tools ********************************************************************************/
   extern void SetEnvironment( FXStringDictionary *dict );
 

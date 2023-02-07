@@ -130,6 +130,19 @@ std::string& operator <<( std::string &dest, const FX::FXString &source ) {
   return dest;
 }
 
+std::ostream& operator <<( std::ostream &store, const FX::FXString &str  ) {
+  return store << str.text( );
+}
+
+std::istream& operator >>( std::istream &store, FX::FXString &str  ) {
+  std::string s;
+
+  store >> s;
+  str << s;
+
+  return store;
+}
+
 /*************************************************************************************************/
 
 /*

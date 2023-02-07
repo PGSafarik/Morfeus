@@ -46,7 +46,6 @@ FXDECLARE( MorfeusWindow )
   XMLElement   *m_xmlservices;     // XML Services list
   XMLElement   *m_xmlmenu;         // XML Menu definition;
   XMLElement   *m_xmlui;           // XML User interface descriptions
-  XMLElement   *m_xmlictheme;	   // XML Icons map list
   XMLElement   *m_xmlcurrent;      // XML Current action entry (context)
 
   /*** Morfeus base ***/
@@ -54,13 +53,13 @@ FXDECLARE( MorfeusWindow )
   FXbool       m_created;    // true - Indikuje, ze jiz probehla faze Morfeus::create( ) - nutne kvuli obrazkum a ikonam.
 
   /*** System ***/
-  FXIconsTheme        *m_ict;      // Zprava tematu ikon
-  //FXIconCache        *m_icons;    // Uloziste ikon v pameti
+  FXIconsTheme       *m_ict;      // Zprava tematu ikon
   FXStringDictionary  m_envdict;  // Seznam promenych prostredi
   ProcessManager     *m_procman;
+  MW_App             *m_app;
 
 public :
-  MorfeusWindow( FXApp *a );
+  MorfeusWindow( MW_App *a );
   virtual ~MorfeusWindow( );
 
 /////////////////////////////////////////////////
@@ -110,7 +109,6 @@ protected :
   FXbool      Initialize( );
   FXbool      ShowMessage( XMLElement *e );
   void        SetCurrent( XMLElement *entry );
-  FXIcon*     GetIcon( const FXString &name, FXint size = 16 );
   FXIcon*     GetIconCopy( const FXString &name, int size = 16 );
   void        ShowMenuIcon( FXIcon *ic = NULL );
   XMLElement* CheckContext( XMLElement *el );

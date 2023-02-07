@@ -27,16 +27,15 @@ FXDEFMAP( MorfeusWindow ) MWM[ ] = {
 };
 FXIMPLEMENT( MorfeusWindow, FXPrimaryWindow, MWM, ARRAYNUMBER( MWM ) )
 
-#define MORFEUS_APP( ) ( dynamic_cast<MW_App*>( this->getApp( ) ) )
-
 /*************************************************************************************************/
-MorfeusWindow::MorfeusWindow( FXApp *a )
+MorfeusWindow::MorfeusWindow( MW_App *a )
              : FXPrimaryWindow( a, "Morfeus", NULL, NULL, CONTROLS_STATIC | WINDOW_MAIN | WINDOW_STATIC | WINDOW_CLIENTSIZE, 0, 0, 500, 350 )
 {
   /// initialize //////////////////////////////
-  new FXToolTip( getApp( ) );
+  m_app = a;
+  new FXToolTip( a );
 
-  m_procman    = new ProcessManager( getApp( ), this, MorfeusWindow::NOTIFY_PROCESS );
+  m_procman    = new ProcessManager( a, this, MorfeusWindow::NOTIFY_PROCESS );
   m_xmlcurrent = NULL;
   m_created    = false;
 
@@ -59,14 +58,14 @@ MorfeusWindow::MorfeusWindow( FXApp *a )
 
     this->menu( mp, m_xmlmenu );
     new FXMenuSeparator( mp );
-    new FXMenuCommand( mp, "About", GetIcon( "#about", 16 ), this, MorfeusWindow::ID_ABOUT );
+    new FXMenuCommand( mp, "About", m_app->getIcon( "#about", 16 ), this, MorfeusWindow::ID_ABOUT );
 
     /// Window headerbar widgets - Service weblinks button bar
     m_service_fr = new FXHorizontalFrame( getHeader( ), LAYOUT_RIGHT | MODE_SERVICE | LAYOUT_CENTER_Y, SPACING_NONE );
 
     this->getApp( )->addSignal( SIGCHLD, m_procman, ProcessManager::SIG_CHILD, false, 0 );
   }
-  else { getHeader( )->setText( "( C ) 2019 - 2022 D.A.Tiger by GNU GPL v3" ); }
+  else { getHeader( )->setText( "( C ) 2019 - 2023 D.A.Tiger by GNU GPL v3" ); }
 }
 
 MorfeusWindow::~MorfeusWindow( )
@@ -76,13 +75,10 @@ MorfeusWindow::~MorfeusWindow( )
 
 void MorfeusWindow::create( )
 {
-   MW_App *a = MORFEUS_APP( );
-
    FXPrimaryWindow::create( );
    this->show( PLACEMENT_SCREEN );
-   m_created = true; /// :'(
 
-   if( a->getXMLstate( ) == XML_SUCCESS ) {
+   if( m_app->getXMLstate( ) == XML_SUCCESS ) {
 	   ShowMenuIcon( );
      weblinks( );
      //actions( );
@@ -102,22 +98,18 @@ FXbool MorfeusWindow::Initialize( )
   /* Necteni sekci z kontrolniho XML souboru a nastaveni titulku okna */
   XMLElement *xml_root = NULL;
   FXbool resh   = false;
-  MW_App *a     = MORFEUS_APP( );
-  
 
   m_xmlservices = NULL;
   m_xmlui       = NULL;
-  m_xmlictheme  = NULL;
 
-  if( a->getXMLstate( ) == XML_SUCCESS ) {
+  if( m_app->getXMLstate( ) == XML_SUCCESS ) {
     FXWindowHeader *wh = getHeader( );
-    m_ict = a->getIconsTheme( );    
+    m_ict = m_app->getIconsTheme( );    
 
-    xml_root      = a->getXMLRoot( );
+    xml_root      = m_app->getXMLRoot( );
     m_xmlservices = xml_root->FirstChildElement( "Services" );
     m_xmlmenu     = xml_root->FirstChildElement( "Menu" );
     m_xmlui       = xml_root->FirstChildElement( "Ui" );
-    m_xmlictheme  = xml_root->FirstChildElement( "Theme:Icons" );
 
     // Titulek okna
     wh->setTitle( xml_root->Attribute( "title" ) );
@@ -134,11 +126,8 @@ FXbool MorfeusWindow::Initialize( )
     if( !w_size.empty( ) ) { this->setWidth( w_size.toInt( ) ); }
     if( !h_size.empty( ) ) { this->setHeight( h_size.toInt( ) ); }
 
-    if( m_xmlictheme ) {
-      FXIcon *icon = GetIcon( xml_root->Attribute( "icon" ) );
-      if( icon ) { setIcon( icon ); }
-    }
-    else { cerr << "[WARNING] Nenalezeny seznam ikon!" << endl; }
+    FXIcon *icon = m_app->getIcon( xml_root->Attribute( "icon" ) );
+    if( icon ) { setIcon( icon ); }
 
     // Pocatecni nastaveni pracovniho adresar Morfea
     FXString wp = xml_root->Attribute( "workdir" );
@@ -192,7 +181,7 @@ FXint MorfeusWindow::weblinks( )
 
   if( m_xmlservices ) {
 	  for( XMLElement *service = m_xmlservices->FirstChildElement( "weblink" ); service; service = service->NextSiblingElement( "weblink" ) ){
-	    FXIcon *icon = GetIcon( service->Attribute( "icon" ) );
+	    FXIcon *icon = m_app->getIcon( service->Attribute( "icon" ) );
       label = ( icon == NULL ? "" : "\t" );
 	    label += service->Attribute( "label" );
 	    FXButton *b = new FXButton( m_service_fr, label, icon, this, MorfeusWindow::SERVICE_WEBLIK, BUTTON_TOOLBAR );
@@ -255,7 +244,7 @@ void MorfeusWindow::SetCurrent( XMLElement *entry )
 
     // Set icon, if-any
     FXString icon_str = entry->Attribute( "icon" );
-    if( !icon_str.empty( ) ) { ShowMenuIcon( GetIcon( icon_str ) ); }
+    if( !icon_str.empty( ) ) { ShowMenuIcon( m_app->getIcon( icon_str ) ); }
   }
 }
 
@@ -303,7 +292,7 @@ long MorfeusWindow::OnCmd_launch( FXObject *sender, FXSelector sel, void *data )
   switch( FXSELID( sel ) ) {
     case MorfeusWindow::ID_LAUNCH : {
       Launch( m_xmlcurrent );
-      if( m_context->getNumItems( ) > 1 ) { MORFEUS_APP( )->WriteConfig( "context", m_xmlcurrent->Name( ) ); }
+      if( m_context->getNumItems( ) > 1 ) { m_app->WriteConfig( "context", m_xmlcurrent->Name( ) ); }
 
       break;
     }
@@ -370,56 +359,12 @@ long MorfeusWindow::OnCld_List( FXObject *sender, FXSelector sel, void *data )
 }
 
 /*** Icons and images ****************************************************************************/
-FXIcon* MorfeusWindow::GetIcon( const FXString &name, int size )
-{
-// Vrati instanci ikony uvedenou v ridicim souboru. Funkce si precte informace o pozadavane ikone
-// z elemntu <Theme:Icons>. Dokaze rozlisit podle pocatacniho znaku '#' ze je pozadovana ikona z
-// preddefinovaneho tematu (viz popis ridiciho XML souboru v dokumentaci)
-//
-// Vrati instanci ikony ze slovniku ikonoveho tematu. Pokud ikona jeste nebyla pred tim pouzite,
-// bude zarazen do iconcahe a odtud bude nadale vracena kdykoliv o ni bude pozdeji pozadano. V
-// pripade neuspechu vraci NULL
-// #name[:size]
-
-
-  if( name.empty( ) ) { return NULL; }
-
-  #ifdef __DEBUG
-  cout << "[DEBUG] Load icon: " << name.text( ) << endl;
-  #endif // __DEBUG
-  FXIcon   *icon = NULL;
-  
-
-  if( name[ 0 ] != '#' ) { icon = m_ict->get_icon( m_xmlictheme, name ); }
-  else {
-	  FXString ic_name, ic_size;
-	  FXint sep = name.find( ':' );
-
-	  if( sep > 0 ) {
-	    ic_name = name.mid( 1, sep - 1 );
-	    ic_size = name.right( ( name.length( ) - sep ) - 1 );
-      icon = m_ict->get_icon( ic_name, ic_size.toInt( ) );
-	  }
-	  else {
-	    ic_name = name.mid( 1, name.length( ) );
-      icon = m_ict->get_icon( ic_name, size );
-	  }
-  }
-
-  if( icon ) { 
-    if( m_created ) { icon->create( ); }
-  }
-  else { cout << "[WARNING] Icon " << name.text( ) << " NOT CREATED!" << endl; } 
-  
-  return icon;
-}
-
 FXIcon* MorfeusWindow::GetIconCopy( const FXString &name, int size )
 {
   FXIcon *copy =NULL;
   FXColor *data = NULL;
 
-  FXIcon *source = GetIcon( name, size );
+  FXIcon *source = m_app->getIcon( name, size );
   FXint w, h, csize;
 
   if( source != NULL ) {

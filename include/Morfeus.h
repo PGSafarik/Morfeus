@@ -54,7 +54,7 @@ FXDECLARE( MorfeusWindow )
 
   /*** System ***/
   FXIconsTheme       *m_ict;      // Zprava tematu ikon
-  FXStringDictionary  m_envdict;  // Seznam promenych prostredi
+  //FXStringDictionary  m_envdict;  // Seznam promenych prostredi
   ProcessManager     *m_procman;
   MW_App             *m_app;
 
@@ -67,7 +67,7 @@ public :
 //
   virtual void create( );
 
-  FXint environment( );				// Nastavy pozadovane promene prostredi
+  //FXint environment( );			// Nastavy pozadovane promene prostredi
   FXint autostart( );				// Spusti casovac a po jeho uplinuti implicitni akci
   FXint weblinks( );				// Vygeneruje a nastavy panel servisnich tlacitek
   FXint menu( FXMenuPane *pane, XMLElement *mel = NULL );	//

@@ -140,11 +140,9 @@ FXbool MorfeusWindow::Initialize( )
 }
 
 /*************************************************************************************************/
+/*
 FXint MorfeusWindow::environment( )
 {
- /* FCE nastasvi promene prostredi
-  * prms -
-  */
 
   FXint _resh = 0;
   FXint _num  = m_envdict.no( );
@@ -162,7 +160,7 @@ FXint MorfeusWindow::environment( )
 
   return _resh;
 }
-
+*/
 FXint MorfeusWindow::autostart( )
 {
  /* realizuje automaticky start vybrane akce

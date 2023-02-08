@@ -30,8 +30,9 @@ FXDECLARE( MW_App )
   FXbool       m_created;     // TRUE - Application is craated (i.e. the create function has been successfully executed)   
   FXbool       m_initialized; // TRUE - Application is initialized (i.e. the init function has been successfully executed )   
 
-  FXint        m_cdir;		   // Index adresar s kontrolnim souborem
-  FXStringList m_dirlist;    // Seznam cest, v nichz se budou hledat kontrolni soubory
+  FXint              m_cdir;      // Index adresar s kontrolnim souborem
+  FXStringList       m_dirlist;   // Seznam cest, v nichz se budou hledat kontrolni soubory
+  FXStringDictionary m_envdict;   // Seznam promenych prostredi
 
   FXIconsTheme *m_icons;    // The icons theme manager    
 
@@ -64,9 +65,10 @@ public:
 
 protected :
   /*** Helpers methods ***/
-  FXString    DecodeControlName( );
-  FXString    FindControlFile( const FXString &name );
-  void        ConsoleHeader( );
+  FXString    DecodeControlName( );                     //
+  FXString    FindControlFile( const FXString &name );  //
+  void        ConsoleHeader( );                         //
+  FXint       environment( );                           // Nastavy pozadovane promene prostredi
 };
 
 #endif // APPLICATION_H_INCLUDED

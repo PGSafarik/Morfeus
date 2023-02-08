@@ -242,6 +242,29 @@ FXString MW_App::FindControlFile( const FXString &name )
   return FXString::null;
 }
 
+FXint MW_App::environment( )
+{
+ /* FCE nastasvi promene prostredi
+  * prms -
+  */
+
+  FXint _resh = 0;
+  FXint _num  = m_envdict.no( );
+  FXString _k, _d;
+
+  for( FXint i = 0; i < _num; i++ ) {
+    _k = m_envdict.key( i );
+    _d = m_envdict.data( i );
+
+    if( !_k.empty( ) && !_d.empty( ) ) {
+      FXSystem::setEnvironment( _k, _d );
+      _resh++;
+    }
+  }
+
+  return _resh;
+}
+
 void MW_App::ConsoleHeader( )
 {
   std::cout << "=== Morfeus =========================================================" << std::endl;

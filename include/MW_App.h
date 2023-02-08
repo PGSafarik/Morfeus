@@ -60,6 +60,7 @@ public:
   FXString      getControlDir( ) { return ( ( m_cdir >= 0 ) ? m_dirlist[ m_cdir ] : FXString::null ); }
   FXIconsTheme* getIconsTheme( ) { return m_icons; }
   FXIcon*       getIcon( const FXString &name, FXint size = 16 );
+  FXIcon*       getIconCopy( const FXString &name, int size = 16 );
 
 protected :
   /*** Helpers methods ***/

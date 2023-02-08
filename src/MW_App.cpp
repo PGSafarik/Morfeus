@@ -129,8 +129,6 @@ FXIcon* MW_App::getIcon( const FXString &name, int size )
 // bude zarazen do iconcahe a odtud bude nadale vracena kdykoliv o ni bude pozdeji pozadano. V
 // pripade neuspechu vraci NULL
 // #name[:size]
-
-
   if( name.empty( ) ) { return NULL; }
 
   #ifdef __DEBUG
@@ -161,6 +159,27 @@ FXIcon* MW_App::getIcon( const FXString &name, int size )
   else { cout << "[WARNING] Icon " << name << " NOT CREATED!" << endl; } 
   
   return icon;
+}
+
+FXIcon* MW_App::getIconCopy( const FXString &name, int size )
+{
+  FXIcon *copy =NULL;
+  FXColor *data = NULL;
+
+  FXIcon *source = getIcon( name, size );
+  FXint w, h, csize;
+
+  if( source != NULL ) {
+    source->restore( );
+    w = source->getWidth( );
+    h = source->getHeight( );
+    csize = w * h;
+    callocElms( data, csize );
+    copyElms( data, source->getData( ), csize );
+    copy = new FXIcon( this, data, source->getTransparentColor( ), source->getOptions( ) | IMAGE_KEEP | IMAGE_SHMI, w, h );
+  }
+
+  return copy;
 }
 
 /*************************************************************************************************/

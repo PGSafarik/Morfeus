@@ -69,6 +69,7 @@ protected :
   FXString    FindControlFile( const FXString &name );  //
   void        ConsoleHeader( );                         //
   FXint       environment( );                           // Nastavy pozadovane promene prostredi
+  FXint       autostart( );				                      // Spusti casovac a po jeho uplinuti implicitni akci
 };
 
 #endif // APPLICATION_H_INCLUDED

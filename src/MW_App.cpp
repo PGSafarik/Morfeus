@@ -265,6 +265,17 @@ FXint MW_App::environment( )
   return _resh;
 }
 
+FXint MW_App::autostart( )
+{
+ /* realizuje automaticky start vybrane akce
+  * prms -
+  */
+
+  FXint _resh = 0;
+  //if( m_autostart ) { _resh = runAction( ); }
+  return _resh;
+}
+
 void MW_App::ConsoleHeader( )
 {
   std::cout << "=== Morfeus =========================================================" << std::endl;

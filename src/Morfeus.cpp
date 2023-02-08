@@ -37,7 +37,6 @@ MorfeusWindow::MorfeusWindow( MW_App *a )
 
   m_procman    = new ProcessManager( a, this, MorfeusWindow::NOTIFY_PROCESS );
   m_xmlcurrent = NULL;
-  m_created    = false;
 
   if( Initialize( ) ) {
     /// Window  mask ////////////////////////////
@@ -140,38 +139,14 @@ FXbool MorfeusWindow::Initialize( )
 }
 
 /*************************************************************************************************/
-/*
-FXint MorfeusWindow::environment( )
-{
-
-  FXint _resh = 0;
-  FXint _num  = m_envdict.no( );
-  FXString _k, _d;
-
-  for( FXint i = 0; i < _num; i++ ) {
-    _k = m_envdict.key( i );
-    _d = m_envdict.data( i );
-
-    if( !_k.empty( ) && !_d.empty( ) ) {
-      FXSystem::setEnvironment( _k, _d );
-      _resh++;
-    }
-  }
-
-  return _resh;
-}
-*/
+/**
 FXint MorfeusWindow::autostart( )
 {
- /* realizuje automaticky start vybrane akce
-  * prms -
-  */
-
   FXint _resh = 0;
   //if( m_autostart ) { _resh = runAction( ); }
   return _resh;
 }
-
+**/
 FXint MorfeusWindow::weblinks( )
 {
   FXint num = 0;

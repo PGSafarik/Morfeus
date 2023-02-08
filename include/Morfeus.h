@@ -50,11 +50,9 @@ FXDECLARE( MorfeusWindow )
 
   /*** Morfeus base ***/
   FXbool       m_autostart;  // Povoleni automatickeho startu defaultni aplikace.
-  FXbool       m_created;    // true - Indikuje, ze jiz probehla faze Morfeus::create( ) - nutne kvuli obrazkum a ikonam.
 
   /*** System ***/
   FXIconsTheme       *m_ict;      // Zprava tematu ikon
-  //FXStringDictionary  m_envdict;  // Seznam promenych prostredi
   ProcessManager     *m_procman;
   MW_App             *m_app;
 
@@ -67,8 +65,7 @@ public :
 //
   virtual void create( );
 
-  //FXint environment( );			// Nastavy pozadovane promene prostredi
-  FXint autostart( );				// Spusti casovac a po jeho uplinuti implicitni akci
+  //FXint autostart( );				// Spusti casovac a po jeho uplinuti implicitni akci
   FXint weblinks( );				// Vygeneruje a nastavy panel servisnich tlacitek
   FXint menu( FXMenuPane *pane, XMLElement *mel = NULL );	//
   FXint Launch( XMLElement *ch, const FXString name = FXString::null );

@@ -49,9 +49,6 @@ FXDECLARE( MorfeusWindow )
   XMLElement   *m_xmlcurrent;      // XML Current action entry (context)
 
   /*** Morfeus base ***/
-  FXbool       m_autostart;  // Povoleni automatickeho startu defaultni aplikace.
-
-  /*** System ***/
   FXIconsTheme       *m_ict;      // Zprava tematu ikon
   ProcessManager     *m_procman;
   MW_App             *m_app;
@@ -60,24 +57,19 @@ public :
   MorfeusWindow( MW_App *a );
   virtual ~MorfeusWindow( );
 
-/////////////////////////////////////////////////
-// Procedure methods
-//
+  /* Procedure methods */
   virtual void create( );
 
-  //FXint autostart( );				// Spusti casovac a po jeho uplinuti implicitni akci
   FXint weblinks( );				// Vygeneruje a nastavy panel servisnich tlacitek
   FXint menu( FXMenuPane *pane, XMLElement *mel = NULL );	//
   FXint Launch( XMLElement *ch, const FXString name = FXString::null );
 
-//////////////////////////////////////////////////
-// Access methods
-//
+
+  /* Access methods */
   const char* getContext( ) { return ( m_xmlcurrent ? m_xmlcurrent->Name( ) : NULL ); }
 
-/////////////////////////////////////////////////
-// GUI event messages
-//
+
+  /* GUI event messages */
   enum {
     ID_LAUNCH = FXPrimaryWindow::ID_LAST,  // Spustit vybranou akci hry (applikace)
     ID_CONFIG,                             // Spustit configuracni script/appku

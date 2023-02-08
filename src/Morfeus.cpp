@@ -139,14 +139,6 @@ FXbool MorfeusWindow::Initialize( )
 }
 
 /*************************************************************************************************/
-/**
-FXint MorfeusWindow::autostart( )
-{
-  FXint _resh = 0;
-  //if( m_autostart ) { _resh = runAction( ); }
-  return _resh;
-}
-**/
 FXint MorfeusWindow::weblinks( )
 {
   FXint num = 0;

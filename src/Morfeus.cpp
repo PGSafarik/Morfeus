@@ -205,7 +205,7 @@ FXint MorfeusWindow::menu( FXMenuPane *pane, XMLElement *mel )
 	    if( type == "Separator" 	) { new FXMenuSeparator( pane ); }
 	    else if( type == "Entry" ) {
         FXString icon_name = e->Attribute( "icon" );
-	      FXIcon   *icon = GetIconCopy( icon_name );
+	      FXIcon   *icon = m_app->getIconCopy( icon_name );
 	      FXMenuCommand *mc = new FXMenuCommand( pane, e->Attribute( "label" ), icon, this, MorfeusWindow::SERVICE_MENU );
 	      mc->setUserData( e );
 	      num++;
@@ -216,7 +216,7 @@ FXint MorfeusWindow::menu( FXMenuPane *pane, XMLElement *mel )
   if( m_xmlservices ) {
     for( XMLElement *entry = m_xmlservices->FirstChildElement( "menu" ); entry; entry = entry->NextSiblingElement( "menu" ) ) {
  	    FXString icon_name = entry->Attribute( "icon" );
-	    FXIcon   *icon = GetIconCopy( icon_name );
+	    FXIcon   *icon = m_app->getIconCopy( icon_name );
 	    FXMenuCommand *mc = new FXMenuCommand( pane, entry->Attribute( "label" ), icon, this, MorfeusWindow::SERVICE_MENU );
 	    XMLElement *mc_service = entry;
 	    mc->setUserData( mc_service );
@@ -359,27 +359,6 @@ long MorfeusWindow::OnCld_List( FXObject *sender, FXSelector sel, void *data )
 }
 
 /*** Icons and images ****************************************************************************/
-FXIcon* MorfeusWindow::GetIconCopy( const FXString &name, int size )
-{
-  FXIcon *copy =NULL;
-  FXColor *data = NULL;
-
-  FXIcon *source = m_app->getIcon( name, size );
-  FXint w, h, csize;
-
-  if( source != NULL ) {
-    source->restore( );
-    w = source->getWidth( );
-    h = source->getHeight( );
-    csize = w * h;
-    callocElms( data, csize );
-    copyElms( data, source->getData( ), csize );
-    copy = new FXIcon( getApp( ), data, source->getTransparentColor( ), source->getOptions( ) | IMAGE_KEEP | IMAGE_SHMI, w, h );
-  }
-
-  return copy;
-}
-
 void MorfeusWindow::ShowMenuIcon( FXIcon *ic )
 {
    FXIcon *menu_ic = NULL;

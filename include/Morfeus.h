@@ -109,7 +109,6 @@ protected :
   FXbool      Initialize( );
   FXbool      ShowMessage( XMLElement *e );
   void        SetCurrent( XMLElement *entry );
-  FXIcon*     GetIconCopy( const FXString &name, int size = 16 );
   void        ShowMenuIcon( FXIcon *ic = NULL );
   XMLElement* CheckContext( XMLElement *el );
 };

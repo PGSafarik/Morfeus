@@ -27,7 +27,7 @@ MW_App::MW_App( const FXString &name, const FXString &vendor )
   ConsoleHeader( );
 
   m_created = m_initialized = false;
-
+  m_verbose = true;
   m_icons = new FXIconsTheme( this );
 
   m_xmldocument = NULL;
@@ -180,6 +180,90 @@ FXIcon* MW_App::getIconCopy( const FXString &name, int size )
   }
 
   return copy;
+}
+
+FXint MW_App::exec( const FXArray<const FXchar*> &cmd, FXuint proc_opts )
+{
+  /* Metoda prevezme prikaz a spusti jej jako novy proces, reprezentovany objektem typu FXProcess, ktery je nasledne 
+     vlozen do bufferu procesu. V pripade uspechu vrati PID spusteneho procesu, v pripade neuspechu vrati chybovy kod
+   
+     - Cesta k spoustenemu souboru (args[0]) nesmi zacinat a koncit mezerou (" ")
+     - Cesta ke spoustenemu souboru musi byt absolutni (tedy od korenoveho adresare)
+     - Navratovy kod spousteneho procesu lze zatim ziskat pouze pri wait = true
+     - Aktivace wait zablokuje celou aplikaci launcheru!
+     FIXME GORGONA_003: Dopracovat spousteci priznaky
+  */
+  FXint pid = 0;
+
+  FXProcess *proc = new FXProcess; 
+  if( proc->start( cmd[ 0 ], cmd.data( ) ) ) {
+    pid = proc->id( );
+
+    FXString key =  FXString::value( pid );
+    m_descendants.insert( key , proc ); 
+    // Notify( true, SEL_CHANGED );
+
+    if( m_verbose ) {
+      std::cout << "EXECUTE the process:";
+      FXString text = "";
+      FXint num = cmd.no( );
+      for( FXint i = 0; i != num; i++ ) { 
+        text += " "; 
+        text += cmd[ i ]; 
+      }
+      text += "\n";
+      text += "PID: " + key; 
+      std::cout << text << std::endl;;
+    }
+
+  }
+  else { std::cout << "[WARNING]: Process " << cmd[ 0 ] << "is not running!" << std::endl; }
+
+  std::cout << "\n";
+  std::cout.flush( );
+
+  return pid;
+}
+
+FXint MW_App::wait( FXProcess *process, FXbool notify )
+{
+  FXint status = 0;
+
+  if( process ) {
+    process->wait( status );
+    //Notify( notify );   
+  }
+  
+  return status;
+}
+
+/**************************************************************************************************/
+long MW_App::OnSig_ExitChild( FXObject *sender, FXSelector sel, void *data )
+{ 
+  FXint    status;
+  FXString msg  = "";
+  struct   rusage __usage;
+  FXint    pid  = ( FXint ) wait3( &status, 0, &__usage );
+
+  FXString key = FXString::value( pid );
+  if( m_descendants.has( key ) ) {
+    FXProcess *proc = m_descendants[ key ];
+    if( proc != NULL ) {
+      m_descendants.remove( key );
+      delete proc;
+      msg = "Unregister the process of the descendant "; 
+      msg += FXString::value( pid ) + ", which just finished with exit code " + FXString::value( status ) + "\n";
+    }
+    msg += "Remaining number of registered processes: ";
+    msg += FXString::value( m_descendants.used( ) );
+  }
+  else { 
+    msg = "The process of the descendant ";
+    msg + FXString::value( pid ) + ", which just finished with exit code " + FXString::value( status );
+  }    
+  
+  std::cout << msg << std::endl;  
+  return 1;
 }
 
 /*************************************************************************************************/

@@ -21,6 +21,15 @@
 * You should have received a copy of the GNU General Public License      *
 * along with this program.  If not, see <https://www.gnu.org/licenses/>. *
 *************************************************************************/
+// Syscalls and system types
+#include <cstdio>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/time.h>
+#include <sys/resource.h>
+#include <sys/wait.h>
+
+// Internal headers 
 #include<FXIconsTheme.h>
 #include<define.h>
 
@@ -28,7 +37,8 @@ class MW_App : public FXApp {
 FXDECLARE( MW_App )
   /*** Base ***/
   FXbool       m_created;     // TRUE - Application is craated (i.e. the create function has been successfully executed)   
-  FXbool       m_initialized; // TRUE - Application is initialized (i.e. the init function has been successfully executed )   
+  FXbool       m_initialized; // TRUE - Application is initialized (i.e. the init function has been successfully executed )  
+  FXbool       m_verbose;     //  
 
   FXint              m_cdir;      // Index adresar s kontrolnim souborem
   FXStringList       m_dirlist;   // Seznam cest, v nichz se budou hledat kontrolni soubory
@@ -42,6 +52,10 @@ FXDECLARE( MW_App )
   XMLElement  *m_xmlroot;
   XMLElement  *m_xml_icons;
 
+  /* Child process managment */
+  FXDictionaryOf<FXProcess>  m_descendants; // List of registered descendants of the Gorgona process 
+
+
 public:
   MW_App( const FXString &name= "Application", const FXString &vendor = FXString::null );
   virtual ~MW_App( );
@@ -50,6 +64,10 @@ public:
   virtual void create( ); 
   virtual void init( int &argc, char **argv, FXbool connect = true );
   FXString     ValidatePath( const FXString &path );
+  FXint exec( const FXArray<const FXchar*> &cmd, FXuint term_opts );
+  FXint wait( FXProcess *process, FXbool notify = false );  
+
+
 
   const FXString ReadConfig( const FXString &key, const FXString &def = "" );
   void           WriteConfig( const FXString &key, const FXString &value );
@@ -62,6 +80,13 @@ public:
   FXIconsTheme* getIconsTheme( ) { return m_icons; }
   FXIcon*       getIcon( const FXString &name, FXint size = 16 );
   FXIcon*       getIconCopy( const FXString &name, int size = 16 );
+  
+  /* GUI handlers & messages */
+  enum {
+   SIGNAL_CHLD = FXApp::ID_LAST,  // End of child proccess
+   ID_LAST
+  };
+  long OnSig_ExitChild( FXObject *sender, FXSelector sel, void *data );
 
 protected :
   /*** Helpers methods ***/

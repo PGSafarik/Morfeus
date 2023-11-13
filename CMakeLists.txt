@@ -1,11 +1,11 @@
 CMAKE_MINIMUM_REQUIRED( VERSION 3.10 )
-PROJECT( Morfeus VERSION 0.1 DESCRIPTION "GUI application launcher for Linux with history" )
+PROJECT( Morfeus VERSION 0.3 DESCRIPTION "GUI application launcher for Linux with history" )
 
 # The project settings
 SET( BIN_NAME "morfeus" )                   # Executable binnary filename
 SET( CMAKE_INSTALL_PREFIX "/usr" )          # Install target directory
-SET( LIB_FOX   "/opt/foxlib/1.7/81" )       # Fox toolkit path
-SET( LIB_FXGHI "/opt/foxghi/0.4"  )       # Fox GHI path
+SET( LIB_FOX   "/opt/foxlib/1.7/84" )       # Fox toolkit path
+SET( LIB_FXGHI "/opt/foxghi/0.4/1"  )       # Fox GHI path
 SET( CMAKE_CXX_STANDARD 11 )                # C++ Standard
 SET( CMAKE_CXX_STANDARD_REQUIRED True )     # C++ Standard
 #add_compile_options(-Wall -Wextra -pedantic -Werror)

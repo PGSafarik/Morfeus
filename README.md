@@ -24,7 +24,7 @@ Morfus can display png images that can be used either as a vertical cover or as 
 
 ## 2. COMPILATION AND INSTALLATION:
 *Dependecies:*
-  * [Foxtoolkit 1.7.76](http://fox-toolkit.org/ftp/fox-1.7.76.tar.gz)
+  * [Foxtoolkit 1.7.84](http://fox-toolkit.org/ftp/fox-1.7.84.tar.gz)
   * [FXGHI 0.4](https://github.com/PGSafarik/FoxGHI)
   * [TinyXML-2 8.0.0](https://github.com/leethomason/tinyxml2)
   

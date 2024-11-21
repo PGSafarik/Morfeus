@@ -1,5 +1,5 @@
 # Morfeus - Universal GUI launcher for games and engines
--31.10.2022-
+-21.11.2024-
 
 *Content:*
   1. [General info](#1-general-info)
@@ -25,7 +25,7 @@ Morfus can display png images that can be used either as a vertical cover or as 
 ## 2. COMPILATION AND INSTALLATION:
 *Dependecies:*
   * [Foxtoolkit 1.7.84](http://fox-toolkit.org/ftp/fox-1.7.84.tar.gz)
-  * [FXGHI 0.4](https://github.com/PGSafarik/FoxGHI)
+  * [FXGHI 0.4](https://github.com/PGSafarik/FoxGHI) <= 24.11 0.4.4.1 ALPHA
   * [TinyXML-2 8.0.0](https://github.com/leethomason/tinyxml2)
   
 *Aditional dependencies for compilation:*
@@ -61,7 +61,7 @@ These lines are commented out by default, so remove the leading '#' characters a
   RESOLUTIN: The icon manager will be overwritten
   
 ## 4. PROJECT STATE AND PLANS FOR THE FUTHURE
-Actual version: 0.3.1 ALFA  
+Actual version: 24.11 0.3.3.0 ALPHA
 
 Other plans for the future:
 * Create user manual

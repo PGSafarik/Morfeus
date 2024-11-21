@@ -367,7 +367,7 @@ void MW_App::ConsoleHeader( )
   std::cout << "Version       : " << Morfeus_Version::MAJOR << "." << Morfeus_Version::MINOR << "." << Morfeus_Version::BUILD 
             << " [" << Morfeus_Version::STATUS << "]" << std::endl;
   std::cout << "lib Fox       : " << FOX_MAJOR << "." << FOX_MINOR << "." << FOX_LEVEL << std::endl;
-  std::cout << "lib FoxGHI    : " << 0 << "." << 2 << "." << 1 << std::endl;
+  std::cout << "lib FoxGHI    : " << /*0 << "." << 2 << "." << 1 */ FXGHI::Version::FULLVERSION_STRING << std::endl;
   std::cout << "lib TinyXML-2 : " << TINYXML2_MAJOR_VERSION << "." << TINYXML2_MINOR_VERSION << "." << TINYXML2_PATCH_VERSION << std::endl;
   std::cout << "\n=== Messages ======================================================" << std::endl;
 }
